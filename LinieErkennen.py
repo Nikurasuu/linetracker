@@ -283,10 +283,5 @@ while True:
             print("waiting for button!")
             time.sleep(1)
 
-        if cv2.waitKey(20) & 0xFF == ord('q'):
-            print("closing..")
-            runProgramm = False
-            break
-
 cap.release()  # When everything done, release the capture
 cv2.destroyAllWindows()
