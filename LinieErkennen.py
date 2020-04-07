@@ -197,10 +197,12 @@ while True:
                 cv2.putText(line, "Gruener Punkt Rechts", (100, 300), cv2.QT_FONT_NORMAL, 1, 150)
                 writeNumber(206)
 
+        # Wenn die Linie unten nach Rechts zeigt und eine sehr große Fläche hat (Scharfe Kurven)
         if linePositionDown > 300 and areaDown > 28000 and noLineUp :
             print("Rechts")
             linePositionDown = 600
 
+        # Wenn oben und unten keine Linie ist
         if noLineDown == 1 and noLineUp == 1:
             linePositionDown = 0
             print("searching Line..")
@@ -242,6 +244,7 @@ while True:
                 writeNumber(value)
                 print("sending linePositionUp!")
 
+        # Wenn keine Linie oben ist, dann Linie unten nehmen
         if linePositionUp == 0 and noLineDown == 0:
             cv2.putText(line, "down", (0, 400), cv2.QT_FONT_NORMAL, 1, 150)
             cv2.putText(line, str(linePositionDown), (0, 460), cv2.QT_FONT_NORMAL, 1, 150)
@@ -249,6 +252,7 @@ while True:
             writeNumber(value)
             print("sending linePositionDown!")
 
+        # Wenn keine Linie unten ist, dann Linie oben nehmen
         if noLineDown == 1 and noLineUp == 0:
             cv2.putText(line, "up", (0, 400), cv2.QT_FONT_NORMAL, 1, 150)
             cv2.putText(line, str(linePositionUp), (0, 460), cv2.QT_FONT_NORMAL, 1, 150)
