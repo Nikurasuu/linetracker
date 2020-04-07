@@ -1,5 +1,28 @@
 #include <Wire.h>
 
+#define MOTOR_PWM_LINKS_1 4
+#define MOTOR_PWM_LINKS_2 5
+#define MOTOR_PWM_RECHTS_1 6
+#define MOTOR_PWM_RECHTS_2 7
+
+#define DIR_MOTOR_LINKS_1 8
+#define DIR_MOTOR_LINKS_2 9
+#define DIR_MOTOR_RECHTS_1 10
+#define DIR_MOTOR_RECHTS_2 11
+
+#define LINKS_DRIFT 0
+#define RECHTS_DRIFT 0
+
+#define AUSGLEICH_MOTOR_LINKS_1 0
+#define AUSGLEICH_MOTOR_LINKS_2 -20
+#define AUSGLEICH_MOTOR_RECHTS_1 0
+#define AUSGLEICH_MOTOR_RECHTS_2 10
+
+#define GRUND_GESCHWINDIGKEIT 75
+
+int geschwindigkeitLinks;
+int geschwindigkeitRechts;
+
 int pi = 250;
 int line = 0;
 boolean noLine = false;
@@ -7,29 +30,6 @@ boolean noLineEvent = false;
 int noLineCounter = 0;
 
 boolean piStopped = false;
-
-int motorPWMLinks_1 = 4;
-int motorPWMLinks_2 = 5;
-int motorPWMRechts_1 = 6;
-int motorPWMRechts_2 = 7;
-
-int dirMotorLinks_1 = 8;
-int dirMotorLinks_2 = 9;
-int dirMotorRechts_1 = 10;
-int dirMotorRechts_2 = 11;
-
-int linksDrift = 0;
-int rechtsDrift = 0;
-
-int ausgleichMotorLinks1 = 0;
-int ausgleichMotorLinks2 = -20;
-int ausgleichMotorRechts1 = 0;
-int ausgleichMotorRechts2 = 10;
-
-int grundGeschwindigkeit = 75;
-
-int geschwindigkeitLinks;
-int geschwindigkeitRechts;
 
 boolean finishedRight;
 boolean finishedLeft;
@@ -66,10 +66,10 @@ void datenAuswerten() {
   if (pi == 235) {
     piStopped = true;
     Serial.println("stopped..");
-    analogWrite(motorPWMLinks_1, 0);
-    analogWrite(motorPWMRechts_1, 0);
-    analogWrite(motorPWMLinks_2, 0);
-    analogWrite(motorPWMRechts_2, 0);
+    analogWrite(MOTOR_PWM_LINKS_1, 0);
+    analogWrite(MOTOR_PWM_LINKS_2, 0);
+    analogWrite(MOTOR_PWM_RECHTS_1, 0);
+    analogWrite(MOTOR_PWM_RECHTS_2, 0);
   } else {
     piStopped = false;
   }
@@ -77,11 +77,11 @@ void datenAuswerten() {
 
 void geschwindigkeitAnpassen() {
   if (line > 0) {
-    geschwindigkeitLinks = grundGeschwindigkeit + (line * 0.2) + linksDrift;
-    geschwindigkeitRechts = grundGeschwindigkeit - (line * 1.2) + rechtsDrift;
+    geschwindigkeitLinks = GRUND_GESCHWINDIGKEIT + (line * 0.2) + LINKS_DRIFT;
+    geschwindigkeitRechts = GRUND_GESCHWINDIGKEIT - (line * 1.2) + RECHTS_DRIFT;
   } else if (line < 0) {
-    geschwindigkeitLinks = grundGeschwindigkeit + (line * 1.2) + linksDrift;
-    geschwindigkeitRechts = grundGeschwindigkeit - (line * 0.2) + rechtsDrift;
+    geschwindigkeitLinks = GRUND_GESCHWINDIGKEIT + (line * 1.2) + LINKS_DRIFT;
+    geschwindigkeitRechts = GRUND_GESCHWINDIGKEIT - (line * 0.2) + RECHTS_DRIFT;
   }
   if (geschwindigkeitLinks < 0) {
     geschwindigkeitLinks = 0;
@@ -89,8 +89,8 @@ void geschwindigkeitAnpassen() {
     geschwindigkeitLinks = 255;
   }
   if (line == 0) {
-    geschwindigkeitLinks = grundGeschwindigkeit  + linksDrift;
-    geschwindigkeitRechts = grundGeschwindigkeit  + rechtsDrift;
+    geschwindigkeitLinks = GRUND_GESCHWINDIGKEIT  + LINKS_DRIFT;
+    geschwindigkeitRechts = GRUND_GESCHWINDIGKEIT  + RECHTS_DRIFT;
   }
 
   if (geschwindigkeitRechts < 0) {
@@ -99,31 +99,31 @@ void geschwindigkeitAnpassen() {
     geschwindigkeitRechts = 255;
   }
 
-  digitalWrite(dirMotorLinks_1, HIGH);
-  digitalWrite(dirMotorRechts_1, LOW);
-  digitalWrite(dirMotorLinks_2, HIGH);
-  digitalWrite(dirMotorRechts_2, LOW);
-  int speedMotor1 = geschwindigkeitLinks + ausgleichMotorLinks1;
+  digitalWrite(DIR_MOTOR_LINKS_1, HIGH);
+  digitalWrite(DIR_MOTOR_RECHTS_1, LOW);
+  digitalWrite(DIR_MOTOR_LINKS_2, HIGH);
+  digitalWrite(DIR_MOTOR_RECHTS_2, LOW);
+  int speedMotor1 = geschwindigkeitLinks + AUSGLEICH_MOTOR_LINKS_1;
   if (speedMotor1 < 0) {
     speedMotor1 = 1;
   }
-  int speedMotor2 = geschwindigkeitLinks + ausgleichMotorLinks2;
+  int speedMotor2 = geschwindigkeitLinks + AUSGLEICH_MOTOR_LINKS_2;
   if (speedMotor2 < 0) {
     speedMotor2 = 1;
   }
-  int speedMotor3 = geschwindigkeitRechts + ausgleichMotorRechts1;
+  int speedMotor3 = geschwindigkeitRechts + AUSGLEICH_MOTOR_RECHTS_1;
   if (speedMotor3 < 0) {
     speedMotor2 = 1;
   }
-  int speedMotor4 = geschwindigkeitRechts + ausgleichMotorRechts2;
+  int speedMotor4 = geschwindigkeitRechts + AUSGLEICH_MOTOR_RECHTS_2;
   if (speedMotor4 < 0) {
     speedMotor4 = 1;
   }
   Serial.println(speedMotor2);
-  analogWrite(motorPWMLinks_1, speedMotor1);
-  analogWrite(motorPWMLinks_2, speedMotor2);
-  analogWrite(motorPWMRechts_1, speedMotor3);
-  analogWrite(motorPWMRechts_2, speedMotor4);
+  analogWrite(MOTOR_PWM_LINKS_1, speedMotor1);
+  analogWrite(MOTOR_PWM_LINKS_2, speedMotor2);
+  analogWrite(MOTOR_PWM_RECHTS_1, speedMotor3);
+  analogWrite(MOTOR_PWM_RECHTS_2, speedMotor4);
 }
 
 void writeMotor(int directionLeft, int directionRight, int motorSpeedLeft , int motorSpeedRight , int howLong) {
@@ -143,33 +143,33 @@ void writeMotor(int directionLeft, int directionRight, int motorSpeedLeft , int 
   } else if (directionLeft == 1) {
     directionLeft = 0;
   }
-  motorSpeedLeft = motorSpeedLeft + linksDrift;
-  motorSpeedRight = motorSpeedRight + rechtsDrift;
-  digitalWrite(dirMotorLinks_1, directionLeft);
-  digitalWrite(dirMotorLinks_2, directionLeft);
-  digitalWrite(dirMotorRechts_1, directionRight);
-  digitalWrite(dirMotorRechts_2, directionRight);
-  int speedMotor1 = motorSpeedLeft + ausgleichMotorLinks1;
+  motorSpeedLeft = motorSpeedLeft + LINKS_DRIFT;
+  motorSpeedRight = motorSpeedRight + RECHTS_DRIFT;
+  digitalWrite(DIR_MOTOR_LINKS_1, directionLeft);
+  digitalWrite(DIR_MOTOR_LINKS_2, directionLeft);
+  digitalWrite(DIR_MOTOR_RECHTS_1, directionRight);
+  digitalWrite(DIR_MOTOR_RECHTS_2, directionRight);
+  int speedMotor1 = motorSpeedLeft + AUSGLEICH_MOTOR_LINKS_1;
   if (speedMotor1 < 0) {
     speedMotor1 = 1;
   }
-  int speedMotor2 = motorSpeedLeft + ausgleichMotorLinks2;
+  int speedMotor2 = motorSpeedLeft + AUSGLEICH_MOTOR_LINKS_2;
   if (speedMotor2 < 0) {
     speedMotor2 = 1;
   }
-  int speedMotor3 = motorSpeedRight + ausgleichMotorRechts1;
+  int speedMotor3 = motorSpeedRight + AUSGLEICH_MOTOR_RECHTS_1;
   if (speedMotor3 < 0) {
     speedMotor2 = 1;
   }
-  int speedMotor4 = motorSpeedRight + ausgleichMotorRechts2;
+  int speedMotor4 = motorSpeedRight + AUSGLEICH_MOTOR_RECHTS_2;
   if (speedMotor4 < 0) {
     speedMotor4 = 1;
   }
   Serial.println(speedMotor2);
-  analogWrite(motorPWMLinks_1, speedMotor1);
-  analogWrite(motorPWMLinks_2, speedMotor2);
-  analogWrite(motorPWMRechts_1, speedMotor3);
-  analogWrite(motorPWMRechts_2, speedMotor4);
+  analogWrite(MOTOR_PWM_LINKS_1, speedMotor1);
+  analogWrite(MOTOR_PWM_LINKS_2, speedMotor2);
+  analogWrite(MOTOR_PWM_RECHTS_1, speedMotor3);
+  analogWrite(MOTOR_PWM_RECHTS_2, speedMotor4);
   delay(howLong);
 }
 
