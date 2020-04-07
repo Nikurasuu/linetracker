@@ -207,7 +207,6 @@ void loop() {
     if(line == 100){
       writeMotor(0, 1, 90, 90, 800);
     }
-
     
     if(line == -100){
       writeMotor(1, 0, 90, 90, 800);
