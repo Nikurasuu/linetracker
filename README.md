@@ -1,15 +1,20 @@
 # Installation Raspberry Pi
-Auf dem Raspberry Pi müssen alle benutzten Libraries für Python 3.7 installiert sein!
-Danach einfach 'LinieErkennen.py' auf den Raspberry Pi ziehen und ausführen.
-Nun sendet der Pi die Position der Linie über i2C an den Arduino. 
-WICHTIG: Logic Level Shifter nicht vergessen!
+Auf dem Raspberry Pi müssen alle benutzten Packages für Python 3.7 installiert sein!
+Dies ist einfach mit `pip install` möglich.
 
-Um das Programm zu verändern und zu aktualisieren, wäre es ratsam einen FTP-Server auf dem Raspberry Pi einzurichten. Dadurch lässt sich das Programm einfach über das Netzwerk updaten.
+Danach `LinieErkennen.py` auf den Raspberry Pi ziehen und mit `python3 LinieErkennen.py` ausführen.
+Nun sendet der Pi die Position der Linie über I²C an den Arduino. 
+
+**WICHTIG: Logic Level Shifter nicht vergessen!**
+
+Um das Programm zu verändern und zu aktualisieren, wäre es ratsam einen FTP-Server auf dem Raspberry Pi einzurichten. Dadurch lässt sich das Programm über das Netzwerk hochladen und verändern.
+
 Einige Programmierumgebungen erlauben es über die FTP Verbindung direkt den Code hochzuladen. Sollte dies nicht möglich sein klappt dies aber mit kostenlosen FTP Clients wie FileZilla.
 
 # Installation Arduino
-Sketch.ino muss auf den Arduino installiert werden, dabei sind keine Libraries wichtig, außer Wire.h
+`Sketch.ino` muss auf den Arduino installiert werden, dabei sind keine Libraries wichtig, außer Wire.h.
 
+Der Arduino muss einfach nur die gesendeten Codes (siehe Unten) lesen und danach Entscheidungen treffen.
 
 # I²C Kommunikation
 Gerät | Rolle | Aufgabe
