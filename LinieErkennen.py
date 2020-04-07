@@ -1,4 +1,4 @@
-print("Version 31-03-2020")
+print("Version 07-04-2020")
 print("importing...")
 
 runProgramm = True
@@ -14,19 +14,14 @@ GPIO.setup(12, GPIO.OUT)
 print("imported and setup GPIO!")
 
 import numpy as np
-
 print("imported numpy")
 import cv2
-
 print("imported OpenCV")
 import imutils
-
 print("imported imutils")
 import time
-
 print("imported time")
 import smbus
-
 print("imported smbus")
 
 bus = smbus.SMBus(1)
