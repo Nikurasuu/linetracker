@@ -88,6 +88,8 @@ while True:
 
     while runProgramm:
 
+        start_time = time.time()
+
         GPIO.output(12, GPIO.HIGH)
 
         noLineDown = 1
@@ -282,6 +284,13 @@ while True:
             print("stopping..")
             print("waiting for button!")
             time.sleep(1)
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            print("closing..")
+            runProgramm = False
+            break
+
+        print("--- %s seconds ---" % (time.time() - start_time))
 
 cap.release()  # When everything done, release the capture
 cv2.destroyAllWindows()
