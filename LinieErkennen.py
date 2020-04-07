@@ -132,8 +132,7 @@ while True:
                 area = cv2.contourArea(cnt)
                 if area >= 20000:
                     try:
-                        linemoment = cv2.moments(
-                            cnt)  # moments methode zum speichern der Eigenschaften für die Kontur in linemoment
+                        linemoment = cv2.moments(cnt)  # moments methode zum speichern der Eigenschaften für die Kontur in linemoment
                         green_x = linemoment['m10'] / linemoment['m00']  # X Position der Kontur aus linemoment ziehen
                     except:
                         print("error trying finding green!")
