@@ -71,7 +71,7 @@ while True:
     # Auf Knopfdruck warten
     # LED Blinken lassen
     GPIO.output(12, GPIO.HIGH)
-    writeNumber(100)
+    writeNumber(215)
     time.sleep(0.1)
     GPIO.output(12, GPIO.LOW)
     time.sleep(0.4)
