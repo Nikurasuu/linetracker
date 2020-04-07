@@ -176,7 +176,7 @@ void writeMotor(int directionLeft, int directionRight, int motorSpeedLeft , int 
 void setup() {
   Wire.begin(0x04);
   Wire.onReceive(receiveEvent);
-  Serial.begin(9600);
+  Serial.begin(115200);
   pinMode(4, OUTPUT);
   pinMode(5, OUTPUT);
   pinMode(6, OUTPUT);
