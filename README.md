@@ -4,6 +4,9 @@ Danach einfach 'LinieErkennen.py' auf den Raspberry Pi ziehen und ausführen.
 Nun sendet der Pi die Position der Linie über i2C an den Arduino. 
 WICHTIG: Logic Level Shifter nicht vergessen!
 
+Um das Programm zu verändern und zu aktualisieren, wäre es ratsam einen FTP-Server auf dem Raspberry Pi einzurichten. Dadurch lässt sich das Programm einfach über das Netzwerk updaten.
+Einige Programmierumgebungen erlauben es über die FTP Verbindung direkt den Code hochzuladen. Sollte dies nicht möglich sein klappt dies aber mit kostenlosen FTP Clients wie FileZilla.
+
 # Installation Arduino
 Sketch.ino muss auf den Arduino installiert werden, dabei sind keine Libraries wichtig, außer Wire.h
 
@@ -13,7 +16,6 @@ Gerät | Rolle | Aufgabe
 ----- | ----- | -------
 Raspberry Pi | master | Bilder Auswerten und Daten senden
 Arduino | slave | Empfangene Daten auswerten und Motoren Steuern
-
 
 # Daten vom Pi
 Code | Beschreibung 
