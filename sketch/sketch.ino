@@ -35,6 +35,10 @@ boolean finishedRight;
 boolean finishedLeft;
 boolean opperationFinished;
 
+boolean greenLeft = false;
+boolean greenRight = false;
+boolean greenBoth = false;
+
 void receiveEvent(int howMany) {
   while (1 < Wire.available()) {
     char c = Wire.read();
@@ -72,6 +76,24 @@ void datenAuswerten() {
     analogWrite(MOTOR_PWM_RECHTS_2, 0);
   } else {
     piStopped = false;
+  }
+
+  if (pi == 205) {
+    greenLeft = true;
+  } else {
+    greenLeft = false;
+  }
+
+  if (pi == 206) {
+    greenRight = true;
+  } else {
+    greenLeft = false;
+  }
+
+  if (pi == 207) {
+    greenBoth = true;
+  } else {
+    greenBoth = false;
   }
 }
 
@@ -174,17 +196,17 @@ void writeMotor(int directionLeft, int directionRight, int motorSpeedLeft , int 
 }
 
 void setup() {
-  Wire.begin(0x04);
-  Wire.onReceive(receiveEvent);
-  Serial.begin(115200);
-  pinMode(4, OUTPUT);
-  pinMode(5, OUTPUT);
-  pinMode(6, OUTPUT);
-  pinMode(7, OUTPUT);
-  pinMode(8, OUTPUT);
-  pinMode(9, OUTPUT);
-  pinMode(10, OUTPUT);
-  pinMode(11, OUTPUT);
+    Wire.begin(0x04);
+    Wire.onReceive(receiveEvent);
+    Serial.begin(115200);
+    pinMode(4, OUTPUT);
+    pinMode(5, OUTPUT);
+    pinMode(6, OUTPUT);
+    pinMode(7, OUTPUT);
+    pinMode(8, OUTPUT);
+    pinMode(9, OUTPUT);
+    pinMode(10, OUTPUT);
+    pinMode(11, OUTPUT);
 }
 
 void loop() {
@@ -196,30 +218,42 @@ void loop() {
     seriellerMonitor();
 
     if (noLine) {
-      writeMotor(0, 0, 90, 90, 300);
-      datenAuswerten();
-      while (noLine) {
-        writeMotor(1, 1, 70, 70, 1);
+        writeMotor(0, 0, 90, 90, 300);
         datenAuswerten();
-      }
+         while (noLine) {
+            writeMotor(1, 1, 70, 70, 1);
+            datenAuswerten();
+        }
+    }
+
+    if (greenLeft) {
+        
+    }
+
+    if (greenRight) {
+        
+    }
+
+    if (greenBoth) {
+        
     }
 
     if(line == 100){
-      writeMotor(0, 1, 90, 90, 800);
+        writeMotor(0, 1, 90, 90, 800);
     }
     
     if(line == -100){
-      writeMotor(1, 0, 90, 90, 800);
+        writeMotor(1, 0, 90, 90, 800);
     }
     
     if (line < -80 && noLine == false) {
-      writeMotor(1, 1, 90, 90, 50);
-      writeMotor(1, 0, 90, 90, 300);
+        writeMotor(1, 1, 90, 90, 50);
+        writeMotor(1, 0, 90, 90, 300);
     }
 
     if (line > 80 && noLine == false) {
-      writeMotor(1, 1, 90, 90, 50);
-      writeMotor(0, 1, 90, 90, 300);
+        writeMotor(1, 1, 90, 90, 50);
+        writeMotor(0, 1, 90, 90, 300);
     }
   }
 }
