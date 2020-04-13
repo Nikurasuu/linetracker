@@ -240,12 +240,12 @@ void loop() {
         writeMotor(1, 0, 90, 90, 800);
     }
     
-    if (line < -80 && noLine == false) {
+    if (line < -70 && noLine == false) {
         writeMotor(1, 1, 90, 90, 50);
         writeMotor(1, 0, 90, 90, 300);
     }
 
-    if (line > 80 && noLine == false) {
+    if (line > 70 && noLine == false) {
         writeMotor(1, 1, 90, 90, 50);
         writeMotor(0, 1, 90, 90, 300);
     }
