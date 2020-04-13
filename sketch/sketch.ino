@@ -14,11 +14,11 @@
 #define RECHTS_DRIFT 0
 
 #define AUSGLEICH_MOTOR_LINKS_1 0
-#define AUSGLEICH_MOTOR_LINKS_2 -20
+#define AUSGLEICH_MOTOR_LINKS_2 0
 #define AUSGLEICH_MOTOR_RECHTS_1 0
-#define AUSGLEICH_MOTOR_RECHTS_2 10
+#define AUSGLEICH_MOTOR_RECHTS_2 0
 
-#define GRUND_GESCHWINDIGKEIT 75
+#define GRUND_GESCHWINDIGKEIT 45
 
 int geschwindigkeitLinks;
 int geschwindigkeitRechts;
@@ -121,9 +121,9 @@ void geschwindigkeitAnpassen() {
     geschwindigkeitRechts = 255;
   }
 
-  digitalWrite(DIR_MOTOR_LINKS_1, HIGH);
+  digitalWrite(DIR_MOTOR_LINKS_1, LOW);
   digitalWrite(DIR_MOTOR_RECHTS_1, LOW);
-  digitalWrite(DIR_MOTOR_LINKS_2, HIGH);
+  digitalWrite(DIR_MOTOR_LINKS_2, LOW);
   digitalWrite(DIR_MOTOR_RECHTS_2, LOW);
   int speedMotor1 = geschwindigkeitLinks + AUSGLEICH_MOTOR_LINKS_1;
   if (speedMotor1 < 0) {
@@ -187,7 +187,6 @@ void writeMotor(int directionLeft, int directionRight, int motorSpeedLeft , int 
   if (speedMotor4 < 0) {
     speedMotor4 = 1;
   }
-  Serial.println(speedMotor2);
   analogWrite(MOTOR_PWM_LINKS_1, speedMotor1);
   analogWrite(MOTOR_PWM_LINKS_2, speedMotor2);
   analogWrite(MOTOR_PWM_RECHTS_1, speedMotor3);
@@ -198,7 +197,7 @@ void writeMotor(int directionLeft, int directionRight, int motorSpeedLeft , int 
 void setup() {
     Wire.begin(0x04);
     Wire.onReceive(receiveEvent);
-    Serial.begin(115200);
+    Serial.begin(9600);
     pinMode(4, OUTPUT);
     pinMode(5, OUTPUT);
     pinMode(6, OUTPUT);
