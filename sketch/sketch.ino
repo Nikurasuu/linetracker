@@ -18,7 +18,7 @@
 #define AUSGLEICH_MOTOR_RECHTS_1 0
 #define AUSGLEICH_MOTOR_RECHTS_2 0
 
-#define GRUND_GESCHWINDIGKEIT 45
+#define GRUND_GESCHWINDIGKEIT 50
 
 int geschwindigkeitLinks;
 int geschwindigkeitRechts;
@@ -160,11 +160,6 @@ void writeMotor(int directionLeft, int directionRight, int motorSpeedLeft , int 
   Serial.print(", ");
   Serial.print(howLong);
   Serial.println(";");
-  if (directionLeft == 0) {
-    directionLeft = 1;
-  } else if (directionLeft == 1) {
-    directionLeft = 0;
-  }
   motorSpeedLeft = motorSpeedLeft + LINKS_DRIFT;
   motorSpeedRight = motorSpeedRight + RECHTS_DRIFT;
   digitalWrite(DIR_MOTOR_LINKS_1, directionLeft);
