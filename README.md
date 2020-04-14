@@ -31,3 +31,5 @@ Code | Beschreibung
 205 | Grüner Punkt Links
 206 | Grüner Punkt Rechts
 207 | Zwei grüne Punkte
+201 | 90 Grad Kurve links
+202 | 90 Grad Kurve Rechts
