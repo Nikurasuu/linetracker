@@ -50,7 +50,7 @@ ret, frame = cap.read()
 
 print(frame.shape)
 
-threshhold = 50
+threshhold = 80
 
 greenMin = 69
 greenMax = 89
@@ -199,9 +199,12 @@ while True:
                 writeNumber(206)
 
         # Wenn die Linie unten nach Rechts zeigt und eine sehr große Fläche hat (Scharfe Kurven)
-        if linePositionDown > 300 and areaDown > 28000 and noLineUp :
+        if linePositionDown > 300 and areaDown > 40000 and noLineUp :
             print("Rechts")
-            linePositionDown = 600
+            writeNumber(202)
+        elif linePositionDown < 300 and areaDown > 40000 and noLineUp :
+            print("Links")
+            writeNumber(201)
 
         # Wenn oben und unten keine Linie ist
         if noLineDown == 1 and noLineUp == 1:
