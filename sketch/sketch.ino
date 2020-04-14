@@ -39,6 +39,10 @@ boolean greenLeft = false;
 boolean greenRight = false;
 boolean greenBoth = false;
 
+boolean cornerLeft = false;
+boolean cornerRight = false;
+int counter = 0;
+
 void receiveEvent(int howMany) {
   while (1 < Wire.available()) {
     char c = Wire.read();
@@ -94,6 +98,18 @@ void datenAuswerten() {
     greenBoth = true;
   } else {
     greenBoth = false;
+  }
+
+  if (pi == 201) {
+    cornerLeft = true;
+  } else {
+    cornerLeft = false;
+  }
+
+  if (pi == 202) {
+    cornerRight = true;
+  } else {
+    cornerRight = false;
   }
 }
 
@@ -232,12 +248,34 @@ void loop() {
         
     }
 
-    if(line == 100){
-        writeMotor(0, 1, 70, 70, 800);
+    if (cornerLeft) {
+        counter = 0;
+        Serial.println("cornerLeft.");
+        writeMotor(0, 0, 70, 70, 400);
+        while (line < -30) {
+            writeMotor(1, 0, 70, 70, 10);
+            datenAuswerten();
+            counter++;
+            if(counter >= 60){
+                writeMotor(0, 0, 0, 0, 2000);
+                counter = 0;
+            }
+        }
     }
-    
-    if(line == -100){
-        writeMotor(1, 0, 70, 70, 800);
+
+    if (cornerRight) {
+        counter = 0;
+        Serial.println("cornerRight.");
+        writeMotor(0, 0, 70, 70, 400);
+        while (line > 30) {
+            writeMotor(0, 1, 70, 70, 10);
+            datenAuswerten();
+            counter++;
+            if(counter >= 60){
+                writeMotor(0, 0, 0, 0, 2000);
+                counter = 0;
+            }
+        }
     }
     
     if (line < -70 && noLine == false) {
