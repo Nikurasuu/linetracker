@@ -1,4 +1,4 @@
-print("Version 07-04-2020")
+print("Version 14-04-2020")
 print("importing...")
 
 runProgramm = True
@@ -64,6 +64,8 @@ isGreen = False
 
 areaDown = 0
 
+cornerLine = False
+
 print("waiting for button!")
 
 while True:
@@ -95,6 +97,7 @@ while True:
         noLineDown = 1
         noLineUp = 1
         isGreen = False
+        cornerLine = False
 
         ret, frame = cap.read()  # Kamerabild als frame abspeichern
 
@@ -193,34 +196,38 @@ while True:
                 print("Gruener Punkt Links!")
                 cv2.putText(line, "Gruener Punkt Links", (100, 300), cv2.QT_FONT_NORMAL, 1, 150)
                 writeNumber(205)
+                break
             elif greenPosition > linePositionDown:
                 print("Gruener Punkt Rechts!")
                 cv2.putText(line, "Gruener Punkt Rechts", (100, 300), cv2.QT_FONT_NORMAL, 1, 150)
                 writeNumber(206)
+                break
 
         # Wenn die Linie unten nach Rechts zeigt und eine sehr große Fläche hat (Scharfe Kurven)
         if linePositionDown > 300 and areaDown > 40000 and noLineUp :
             print("Rechts")
             writeNumber(202)
+            cornerLine = True
         elif linePositionDown < 300 and areaDown > 40000 and noLineUp :
             print("Links")
             writeNumber(201)
+            cornerLine = True
 
         # Wenn oben und unten keine Linie ist
-        if noLineDown == 1 and noLineUp == 1:
+        if noLineDown == 1 and noLineUp == 1 and cornerLine == False:
             linePositionDown = 0
             print("searching Line..")
             cv2.putText(line, "searching Line..", (150, 300), cv2.QT_FONT_NORMAL, 1, 150)
             writeNumber(225)
 
-        if 250 < linePositionDown < 350 and isGreen == False:
+        if 250 < linePositionDown < 350 and isGreen == False and cornerLine == False:
             print("sending linePositionDown!")
             cv2.putText(line, "down", (0, 400), cv2.QT_FONT_NORMAL, 1, 150)
             cv2.putText(line, str(linePositionDown), (0, 460), cv2.QT_FONT_NORMAL, 1, 150)
             value = round(linePositionDown / 3)
             writeNumber(value)
 
-        if 250 > linePositionDown >= 1 and isGreen == False:
+        if 250 > linePositionDown >= 1 and isGreen == False and cornerLine == False:
             if 250 > linePositionUp > 1:
                 cv2.putText(line, "down", (0, 400), cv2.QT_FONT_NORMAL, 1, 150)
                 cv2.putText(line, str(linePositionDown), (0, 460), cv2.QT_FONT_NORMAL, 1, 150)
@@ -234,7 +241,7 @@ while True:
                 writeNumber(value)
                 print("sending linePositionUp!")
 
-        if linePositionDown > 350 and isGreen == False:
+        if linePositionDown > 350 and isGreen == False and cornerLine == False:
             if linePositionUp > 350:
                 cv2.putText(line, "down", (0, 400), cv2.QT_FONT_NORMAL, 1, 150)
                 cv2.putText(line, str(linePositionDown), (0, 460), cv2.QT_FONT_NORMAL, 1, 150)
@@ -249,7 +256,7 @@ while True:
                 print("sending linePositionUp!")
 
         # Wenn keine Linie oben ist, dann Linie unten nehmen
-        if linePositionUp == 0 and noLineDown == 0:
+        if linePositionUp == 0 and noLineDown == 0 and cornerLine == False:
             cv2.putText(line, "down", (0, 400), cv2.QT_FONT_NORMAL, 1, 150)
             cv2.putText(line, str(linePositionDown), (0, 460), cv2.QT_FONT_NORMAL, 1, 150)
             value = round(linePositionDown / 3)
@@ -257,7 +264,7 @@ while True:
             print("sending linePositionDown!")
 
         # Wenn keine Linie unten ist, dann Linie oben nehmen
-        if noLineDown == 1 and noLineUp == 0:
+        if noLineDown == 1 and noLineUp == 0 and cornerLine == False:
             cv2.putText(line, "up", (0, 400), cv2.QT_FONT_NORMAL, 1, 150)
             cv2.putText(line, str(linePositionUp), (0, 460), cv2.QT_FONT_NORMAL, 1, 150)
             value = round(linePositionUp / 3)
