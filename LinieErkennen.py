@@ -210,6 +210,7 @@ while True:
             print("Links")
             writeNumber(201)
             cornerLine = True
+            # test
 
         # Wenn oben und unten keine Linie ist
         if noLineDown == 1 and noLineUp == 1 and cornerLine == False and isGreen == False:
