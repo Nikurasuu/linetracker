@@ -18,7 +18,7 @@ print("imported numpy")
 import cv2
 print("imported OpenCV")
 import imutils
-print("imported imutils")
+print("imported imutils")   
 import time
 print("imported time")
 import smbus
