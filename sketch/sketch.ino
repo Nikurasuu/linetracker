@@ -82,19 +82,19 @@ void datenAuswerten() {
     piStopped = false;
   }
 
-  if (pi == 205) {
+  if (pi == 206) {
     greenLeft = true;
   } else {
     greenLeft = false;
   }
 
-  if (pi == 206) {
+  if (pi == 207) {
     greenRight = true;
   } else {
     greenLeft = false;
   }
 
-  if (pi == 207) {
+  if (pi == 208) {
     greenBoth = true;
   } else {
     greenBoth = false;
@@ -237,15 +237,21 @@ void loop() {
     }
 
     if (greenLeft) {
+        Serial.println("links");
         writeMotor(0,0,1,1,1000);
+        greenLeft = false;
     }
 
     if (greenRight) {
+        Serial.println("rechts");
         writeMotor(0,0,1,1,1000);
+        greenRight = false;
     }
 
     if (greenBoth) {
-        
+        Serial.println("both");
+        writeMotor(0,0,1,1,1000);
+        greenBoth = false;    
     }
 
     if (cornerLeft) {

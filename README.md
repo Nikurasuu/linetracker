@@ -28,8 +28,8 @@ Code | Beschreibung
 0 - 200 | Normale Position der Linie 
 225 | Keine Linie gefunden
 215 | Programm pausiert auf dem Pi
-205 | Grüner Punkt Links
-206 | Grüner Punkt Rechts
-207 | Zwei grüne Punkte
+206 | Grüner Punkt Links
+207 | Grüner Punkt Rechts
+208 | Zwei grüne Punkte
 201 | 90 Grad Kurve links
 202 | 90 Grad Kurve Rechts

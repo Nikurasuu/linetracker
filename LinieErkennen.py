@@ -1,4 +1,4 @@
-print("Version 05-06-2020")
+print("Version 06-06-2020")
 print("importing...")
 
 runProgramm = True
@@ -195,11 +195,11 @@ while True:
             if greenPosition < linePositionDown:
                 print("Gruener Punkt Links!")
                 cv2.putText(line, "Gruener Punkt Links", (100, 300), cv2.QT_FONT_NORMAL, 1, 150)
-                writeNumber(205)
+                writeNumber(206)
             elif greenPosition > linePositionDown:
                 print("Gruener Punkt Rechts!")
                 cv2.putText(line, "Gruener Punkt Rechts", (100, 300), cv2.QT_FONT_NORMAL, 1, 150)
-                writeNumber(206)
+                writeNumber(207)
 
         # Wenn die Linie unten nach Rechts zeigt und eine sehr große Fläche hat (Scharfe Kurven)
         if linePositionDown > 300 and areaDown > 40000 and noLineUp and isGreen == False:
