@@ -53,7 +53,7 @@ print(frame.shape)
 threshhold = 80
 
 greenMin = 69
-greenMax = 79
+greenMax = 74
 
 createTrackbars = 0
 
@@ -135,7 +135,7 @@ while True:
             cnt = greenContours[0]
             for cnt in greenContours:
                 area = cv2.contourArea(cnt)
-                if area >= 12000:
+                if area >= 8000:
                     try:
                         linemoment = cv2.moments(cnt)  # moments methode zum speichern der Eigenschaften für die Kontur in linemoment
                         green_x = linemoment['m10'] / linemoment['m00']  # X Position der Kontur aus linemoment ziehen
@@ -275,7 +275,7 @@ while True:
 
         # Bilder anzeigen
         cv2.imshow('line', line)
-        # cv2.imshow('gruen', gruenThreshold)
+        cv2.imshow('gruen', gruenThreshold)
 
         if createTrackbars == 0:
             cv2.createTrackbar('threshhold', 'line', threshhold, 255, nothing)
