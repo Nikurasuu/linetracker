@@ -61,6 +61,7 @@ void seriellerMonitor() {
 }
 
 void datenAuswerten() {
+  Serial.println("Erhaltender Code:" + pi);
   if (pi > 0 && pi < 200) {
     line = pi - 100;
   }
