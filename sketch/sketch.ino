@@ -71,9 +71,8 @@ void datenAuswerten() {
     noLine = false;
   }
 
-  if (pi == 235) {
+  if (pi == 215) {
     piStopped = true;
-    Serial.println("stopped..");
     analogWrite(MOTOR_PWM_LINKS_1, 0);
     analogWrite(MOTOR_PWM_LINKS_2, 0);
     analogWrite(MOTOR_PWM_RECHTS_1, 0);
@@ -223,7 +222,7 @@ void loop() {
 
     datenAuswerten();
 
-    while (true) {
+    while (!piStopped) {
     datenAuswerten();
     geschwindigkeitAnpassen();
     //seriellerMonitor();
@@ -267,6 +266,7 @@ void loop() {
         counter = 0;
         Serial.println("cornerLeft.");
         writeMotor(0, 0, 70, 70, 400);
+        writeMotor(1, 0, 70, 70, 1200);
         while (line < -30) {
             writeMotor(1, 0, 70, 70, 10);
             datenAuswerten();
@@ -282,6 +282,7 @@ void loop() {
         counter = 0;
         Serial.println("cornerRight.");
         writeMotor(0, 0, 70, 70, 400);
+        writeMotor(0,1,70,70,1200);
         while (line > 30) {
             writeMotor(0, 1, 70, 70, 10);
             datenAuswerten();
