@@ -61,7 +61,6 @@ void seriellerMonitor() {
 }
 
 void datenAuswerten() {
-  Serial.println("Erhaltender Code:" + pi);
   if (pi > 0 && pi < 200) {
     line = pi - 100;
   }
@@ -158,7 +157,6 @@ void geschwindigkeitAnpassen() {
   if (speedMotor4 < 0) {
     speedMotor4 = 1;
   }
-  Serial.println(speedMotor2);
   analogWrite(MOTOR_PWM_LINKS_1, speedMotor1);
   analogWrite(MOTOR_PWM_LINKS_2, speedMotor2);
   analogWrite(MOTOR_PWM_RECHTS_1, speedMotor3);
@@ -210,6 +208,7 @@ void setup() {
     Wire.begin(0x04);
     Wire.onReceive(receiveEvent);
     Serial.begin(9600);
+    Serial.println("Hello World!");
     pinMode(4, OUTPUT);
     pinMode(5, OUTPUT);
     pinMode(6, OUTPUT);
@@ -221,12 +220,13 @@ void setup() {
 }
 
 void loop() {
-  datenAuswerten();
 
-  while (!piStopped) {
+    datenAuswerten();
+
+    while (true) {
     datenAuswerten();
     geschwindigkeitAnpassen();
-    seriellerMonitor();
+    //seriellerMonitor();
 
     if (noLine) {
         writeMotor(0, 0, 70, 70, 300);
@@ -244,9 +244,16 @@ void loop() {
     }
 
     if (greenRight) {
-        Serial.println("rechts");
-        writeMotor(0,0,1,1,1000);
-        greenRight = false;
+        Serial.println("1");
+        writeMotor(0,0,70,70,400);
+        Serial.println("2");
+        writeMotor(0, 1, 70, 70, 1000);
+        while (line > 30) {
+            Serial.println("3");
+            writeMotor(0, 1, 70, 70, 10);
+            datenAuswerten();
+        }
+        Serial.println("4");
     }
 
     if (greenBoth) {
@@ -287,12 +294,12 @@ void loop() {
     
     if (line < -70 && noLine == false) {
         writeMotor(1, 1, 70, 70, 50);
-        writeMotor(1, 0, 70, 70, 300);
+        writeMotor(1, 0, 70, 70, 280);
     }
 
     if (line > 70 && noLine == false) {
         writeMotor(1, 1, 70, 70, 50);
-        writeMotor(0, 1, 70, 70, 300);
+        writeMotor(0, 1, 70, 70, 280);
     }
   }
 }
