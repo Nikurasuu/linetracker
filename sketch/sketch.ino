@@ -247,13 +247,14 @@ void loop() {
         Serial.println("1");
         writeMotor(0,0,70,70,400);
         Serial.println("2");
-        writeMotor(0, 1, 70, 70, 1000);
+        writeMotor(0, 1, 70, 70, 1200);
         while (line > 30) {
             Serial.println("3");
             writeMotor(0, 1, 70, 70, 10);
             datenAuswerten();
         }
         Serial.println("4");
+        greenRight = false;
     }
 
     if (greenBoth) {
