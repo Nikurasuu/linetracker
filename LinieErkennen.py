@@ -93,7 +93,7 @@ while True:
         start_time = time.time()
 
         GPIO.output(12, GPIO.HIGH)
-
+        
         noLineDown = 1
         noLineUp = 1
         isGreen = False
