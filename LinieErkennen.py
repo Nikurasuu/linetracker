@@ -14,8 +14,6 @@ print("imported smbus")
 
 runProgramm = True
 
-doneSending = False
-
 import RPi.GPIO as GPIO  # Import Raspberry Pi GPIO library
 
 GPIO.setwarnings(False)  # Ignore warning for now
@@ -31,10 +29,11 @@ address = 0x04
 
 
 def writeNumber(value):
+    global doneSending
     try:
         bus.write_byte(address, value)
         print("übertrage: " + str(value))
-        done = True
+        doneSending = True
         # bus.write_byte_data(address, 0, value)
         return -1
     except:
