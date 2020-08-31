@@ -1,7 +1,20 @@
 print("Version 06-06-2020")
 print("importing...")
 
+import numpy as np
+print("imported numpy")
+import cv2
+print("imported OpenCV")
+import imutils
+print("imported imutils")
+import time
+print("imported time")
+import smbus
+print("imported smbus")
+
 runProgramm = True
+
+doneSending = False
 
 import RPi.GPIO as GPIO  # Import Raspberry Pi GPIO library
 
@@ -13,17 +26,6 @@ GPIO.setup(10, GPIO.IN,
 GPIO.setup(12, GPIO.OUT)
 print("imported and setup GPIO!")
 
-import numpy as np
-print("imported numpy")
-import cv2
-print("imported OpenCV")
-import imutils
-print("imported imutils")   
-import time
-print("imported time")
-import smbus
-print("imported smbus")
-
 bus = smbus.SMBus(1)
 address = 0x04
 
@@ -32,6 +34,7 @@ def writeNumber(value):
     try:
         bus.write_byte(address, value)
         print("übertrage: " + str(value))
+        done = True
         # bus.write_byte_data(address, 0, value)
         return -1
     except:
@@ -55,16 +58,17 @@ threshhold = 80
 greenMin = 69
 greenMax = 74
 
-createTrackbars = 0
+createTrackbars = False
 
-linePositionDown = 0
-linePositionUp = 0
+linePositionDown = False
+linePositionUp = False
 greenPosition = 0
 isGreen = False
 
 areaDown = 0
 
 cornerLine = False
+
 
 print("waiting for button!")
 
@@ -94,10 +98,12 @@ while True:
 
         GPIO.output(12, GPIO.HIGH)
         
-        noLineDown = 1
-        noLineUp = 1
+        noLineDown = True
+        noLineUp = True
         isGreen = False
         cornerLine = False
+
+        doneSending = False
 
         ret, frame = cap.read()  # Kamerabild als frame abspeichern
 
@@ -154,7 +160,7 @@ while True:
                 area = cv2.contourArea(cnt)
                 if area >= 15000:
                     areaDown = area
-                    noLineDown = 0
+                    noLineDown = False
                     try:
                         linemoment = cv2.moments(cnt)
                         line_x = linemoment['m10'] / linemoment['m00']
@@ -172,7 +178,7 @@ while True:
             for cnt in lineContoursUp:
                 area = cv2.contourArea(cnt)
                 if area >= 12000:
-                    noLineUp = 0
+                    noLineUp = False
                     try:
                         linemoment = cv2.moments(cnt)
                         line_x = linemoment['m10'] / linemoment['m00']
@@ -187,10 +193,10 @@ while True:
 
         print(linePositionUp)
         print(linePositionDown)
-
         print(areaDown)
 
-        if isGreen and noLineDown == 0:
+        # Wenn unten die Linie ist und der Grüne Punkt erkannt wurde:
+        if isGreen and noLineDown == False and doneSending == False:
             print(greenPosition)
             if greenPosition < linePositionDown:
                 print("Gruener Punkt Links!")
@@ -202,36 +208,40 @@ while True:
                 writeNumber(207)
 
         # Wenn die Linie unten nach Rechts zeigt und eine sehr große Fläche hat (Scharfe Kurven)
-        if linePositionDown > 300 and areaDown > 40000 and noLineUp and isGreen == False:
+        if linePositionDown > 300 and areaDown > 40000 and noLineUp and isGreen == False and doneSending == False:
             print("Rechts")
             writeNumber(202)
             cornerLine = True
-        elif linePositionDown < 300 and areaDown > 40000 and noLineUp and isGreen == False:
+        elif linePositionDown < 300 and areaDown > 40000 and noLineUp and isGreen == False and doneSending == False:
             print("Links")
             writeNumber(201)
             cornerLine = True
 
         # Wenn oben und unten keine Linie ist
-        if noLineDown == 1 and noLineUp == 1 and cornerLine == False and isGreen == False:
+        if noLineDown == True and noLineUp == True and cornerLine == False and isGreen == False and doneSending == False:
             linePositionDown = 0
             print("searching Line..")
             cv2.putText(line, "searching Line..", (150, 300), cv2.QT_FONT_NORMAL, 1, 150)
             writeNumber(225)
 
-        if 250 < linePositionDown < 350 and isGreen == False and cornerLine == False:
+        #Wenn die Linie unten nach Rechts zeigt
+        if 250 < linePositionDown < 350 and isGreen == False and cornerLine == False and doneSending == False:
             print("sending linePositionDown!")
             cv2.putText(line, "down", (0, 400), cv2.QT_FONT_NORMAL, 1, 150)
             cv2.putText(line, str(linePositionDown), (0, 460), cv2.QT_FONT_NORMAL, 1, 150)
             value = round(linePositionDown / 3)
             writeNumber(value)
 
-        if 250 > linePositionDown >= 1 and isGreen == False and cornerLine == False:
+        # Wenn die Position der Linie unten einen Schwellwert erreicht, wird mit der oberen Linie kontrolliert
+        if 250 > linePositionDown >= 1 and isGreen == False and cornerLine == False and doneSending == False:
+            # Position stimmt mit der oberen überein
             if 250 > linePositionUp > 1:
                 cv2.putText(line, "down", (0, 400), cv2.QT_FONT_NORMAL, 1, 150)
                 cv2.putText(line, str(linePositionDown), (0, 460), cv2.QT_FONT_NORMAL, 1, 150)
                 value = round(linePositionDown / 3)
                 writeNumber(value)
                 print("sending linePositionDown!")
+            # Position stimmt nicht überein
             elif linePositionUp > 250:
                 cv2.putText(line, "up", (0, 400), cv2.QT_FONT_NORMAL, 1, 150)
                 cv2.putText(line, str(linePositionUp), (0, 460), cv2.QT_FONT_NORMAL, 1, 150)
@@ -239,13 +249,16 @@ while True:
                 writeNumber(value)
                 print("sending linePositionUp!")
 
-        if linePositionDown > 350 and isGreen == False and cornerLine == False:
+        # Wenn die untere Linie einen Schwellwert erreicht, wird mit der oberen Linie kontrolliert
+        if linePositionDown > 350 and isGreen == False and cornerLine == False and doneSending == False:
+            # Position stimmt überein
             if linePositionUp > 350:
                 cv2.putText(line, "down", (0, 400), cv2.QT_FONT_NORMAL, 1, 150)
                 cv2.putText(line, str(linePositionDown), (0, 460), cv2.QT_FONT_NORMAL, 1, 150)
                 value = round(linePositionDown / 3)
                 writeNumber(value)
                 print("sending linePositionDown!")
+            # Position stimmt nicht überein
             elif 350 > linePositionUp > 1:
                 cv2.putText(line, "up", (0, 400), cv2.QT_FONT_NORMAL, 1, 150)
                 cv2.putText(line, str(linePositionUp), (0, 460), cv2.QT_FONT_NORMAL, 1, 150)
@@ -254,7 +267,7 @@ while True:
                 print("sending linePositionUp!")
 
         # Wenn keine Linie oben ist, dann Linie unten nehmen
-        if linePositionUp == 0 and noLineDown == 0 and cornerLine == False and isGreen == False:
+        if linePositionUp == 0 and noLineDown == False and cornerLine == False and isGreen == False and doneSending == False:
             cv2.putText(line, "down", (0, 400), cv2.QT_FONT_NORMAL, 1, 150)
             cv2.putText(line, str(linePositionDown), (0, 460), cv2.QT_FONT_NORMAL, 1, 150)
             value = round(linePositionDown / 3)
@@ -262,7 +275,7 @@ while True:
             print("sending linePositionDown!")
 
         # Wenn keine Linie unten ist, dann Linie oben nehmen
-        if noLineDown == 1 and noLineUp == 0 and cornerLine == False and isGreen == False:
+        if noLineDown == 1 and noLineUp == 0 and cornerLine == False and isGreen == False and doneSending == False:
             cv2.putText(line, "up", (0, 400), cv2.QT_FONT_NORMAL, 1, 150)
             cv2.putText(line, str(linePositionUp), (0, 460), cv2.QT_FONT_NORMAL, 1, 150)
             value = round(linePositionUp / 3)
