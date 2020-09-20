@@ -8,13 +8,12 @@ import imutils
 print("imported imutils")
 import time
 print("imported time")
-import smbus
-print("imported smbus")
 
 def nothing(x):
     pass
 
-cap = cv2.VideoCapture(0)
+
+cap = cv2.VideoCapture('line2.mp4')
 
 cap.set(cv2.CAP_PROP_FPS, 30)
 
