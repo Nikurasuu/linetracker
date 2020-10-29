@@ -13,7 +13,7 @@ def nothing(x):
     pass
 
 
-cap = cv2.VideoCapture('line2.mp4')
+cap = cv2.VideoCapture(0)
 
 cap.set(cv2.CAP_PROP_FPS, 30)
 
@@ -98,6 +98,10 @@ while True:
 
     print(line_x_up)
     print(line_x_down)
+
+    line_rotation = line_x_up - line_x_down
+
+    print(line_rotation)
 
     cv2.drawContours(frame, lineContoursDown, -1, (150, 150, 0), 0, offset=(0, 300))
     cv2.drawContours(frame, lineContoursUp, -1, (150, 150, 0), 0)
