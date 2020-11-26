@@ -12,7 +12,6 @@ print("imported time")
 def nothing(x):
     pass
 
-
 cap = cv2.VideoCapture(0)
 
 cap.set(cv2.CAP_PROP_FPS, 30)
@@ -117,8 +116,6 @@ while True:
     cv2.waitKey(1)
 
     print("--- %s seconds ---" % (time.time() - start_time))
-
-
 
 cap.release()  # When everything done, release the capture
 cv2.destroyAllWindows()
