@@ -1,4 +1,3 @@
-print("Version 03-09-2020")
 print("importing...")
 
 import numpy as np
