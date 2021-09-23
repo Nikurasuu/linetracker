@@ -1,6 +1,6 @@
 # Installation Raspberry Pi
 Auf dem Raspberry Pi müssen alle benutzten Packages für Python 3.7 installiert sein!
-Dies ist einfach mit `pip install` möglich.
+Dies ist einfach mit `pip3 install` möglich.
 
 Danach `LinieErkennen.py` auf den Raspberry Pi ziehen und mit `python3 LinieErkennen.py` ausführen.
 Nun sendet der Pi die Position der Linie über I²C an den Arduino. 
