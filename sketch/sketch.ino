@@ -43,6 +43,10 @@ boolean cornerLeft = false;
 boolean cornerRight = false;
 int counter = 0;
 
+int neigung;
+int neigung_offset;
+int neigung_scale = 1; // higher = lower
+
 void receiveEvent(int howMany) {
   while (1 < Wire.available()) {
     char c = Wire.read();
@@ -58,7 +62,9 @@ void seriellerMonitor() {
   Serial.print(geschwindigkeitLinks);
   Serial.print(", ");
   Serial.print(geschwindigkeitRechts);
-  Serial.println(";");
+  Serial.print("; ");
+  Serial.print(neigung);
+  Serial.println("; ");
 }
 
 void datenAuswerten() {
@@ -121,6 +127,10 @@ void geschwindigkeitAnpassen() {
     geschwindigkeitLinks = GRUND_GESCHWINDIGKEIT + (line * 1.2) + LINKS_DRIFT;
     geschwindigkeitRechts = GRUND_GESCHWINDIGKEIT - (line * 0.2) + RECHTS_DRIFT;
   }
+
+  geschwindigkeitLinks = geschwindigkeitLinks - (neigung / neigung_scale);
+  geschwindigkeitRechts = geschwindigkeitRechts - (neigung / neigung_scale);
+  
   if (geschwindigkeitLinks < 0) {
     geschwindigkeitLinks = 0;
   } else if (geschwindigkeitLinks > 255) {
@@ -161,6 +171,11 @@ void geschwindigkeitAnpassen() {
   analogWrite(MOTOR_PWM_LINKS_2, speedMotor2);
   analogWrite(MOTOR_PWM_RECHTS_1, speedMotor3);
   analogWrite(MOTOR_PWM_RECHTS_2, speedMotor4);
+  /*Serial.print("Motor: ");
+  Serial.print(speedMotor1 + " ");
+  Serial.print(speedMotor2 + " ");
+  Serial.print(speedMotor3 + " ");
+  Serial.println(speedMotor4 + " ");*/
 }
 
 void writeMotor(int directionLeft, int directionRight, int motorSpeedLeft , int motorSpeedRight , int howLong) {
@@ -217,16 +232,21 @@ void setup() {
     pinMode(9, OUTPUT);
     pinMode(10, OUTPUT);
     pinMode(11, OUTPUT);
+    pinMode(A4, INPUT);
+    neigung_offset = analogRead(A4);
 }
 
 void loop() {
-
+    
     datenAuswerten();
 
     while (!piStopped) {
+    neigung = analogRead(A4) - neigung_offset;
+    //Serial.println(neigung);
+    
     datenAuswerten();
     geschwindigkeitAnpassen();
-    //seriellerMonitor();
+    seriellerMonitor();
 
     if (noLine) {
         writeMotor(0, 0, 70, 70, 300);
