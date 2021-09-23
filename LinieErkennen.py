@@ -17,8 +17,7 @@ import RPi.GPIO as GPIO  # Import Raspberry Pi GPIO library
 
 GPIO.setwarnings(False)  # Ignore warning for now
 GPIO.setmode(GPIO.BOARD)  # Use physical pin numbering
-GPIO.setup(10, GPIO.IN,
-           pull_up_down=GPIO.PUD_DOWN)  # Set pin 10 to be an input pin and set initial value to be pulled low (off)
+GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Set pin 10 to be an input pin and set initial value to be pulled low (off)
 
 GPIO.setup(12, GPIO.OUT)
 print("imported and setup GPIO!")
@@ -113,8 +112,7 @@ while True:
         line = cv2.erode(line, None, iterations=2)  # Filter um rauschen rauszufiltern
         line = cv2.dilate(line, None, iterations=2)
 
-        linedown = line[300:480,
-                   0:640]  # Zwei Region-of-interest regionen erstellen um den Linienverlauf zu analysieren
+        linedown = line[300:480,0:640]  # Zwei Region-of-interest regionen erstellen um den Linienverlauf zu analysieren
         lineup = line[0:200, 0:640]
 
         # Grüner Punkt
@@ -131,8 +129,7 @@ while True:
         # Konturen suchen
         linedown, lineContoursDown, hirachy = cv2.findContours(linedown.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         lineup, lineContoursUp, hirachy = cv2.findContours(lineup.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        gruenThreshold, greenContours, hirachy = cv2.findContours(gruenThreshold.copy(), cv2.RETR_TREE,
-                                                                  cv2.CHAIN_APPROX_SIMPLE)
+        gruenThreshold, greenContours, hirachy = cv2.findContours(gruenThreshold.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
         # Jede gefundene Kontur anhand der Größe rausfiltern, um die richtige zu finden
         try:
