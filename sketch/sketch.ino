@@ -18,7 +18,7 @@
 #define AUSGLEICH_MOTOR_RECHTS_1 0
 #define AUSGLEICH_MOTOR_RECHTS_2 0
 
-#define GRUND_GESCHWINDIGKEIT 50
+#define GRUND_GESCHWINDIGKEIT 45
 
 int geschwindigkeitLinks;
 int geschwindigkeitRechts;
