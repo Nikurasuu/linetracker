@@ -50,7 +50,7 @@ ret, frame = cap.read()
 
 print(frame.shape)
 
-threshhold = 70
+threshhold = 80
 
 greenMin = 69
 greenMax = 74
